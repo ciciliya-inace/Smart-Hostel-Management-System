@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+    <title>Student Dashboard - Smart Hostel</title>
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+
+    <style>
+
+        .status {
+            display: inline-block;
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-weight: bold;
+            font-size: 13px;
+        }
+
+        .status-pending {
+            background: #fff3cd;
+            color: #856404;
+        }
+
+        .status-approved {
+            background: #d4edda;
+            color: #155724;
+        }
+
+        .status-rejected {
+            background: #f8d7da;
+            color: #721c24;
+        }
+
+    </style>
+
+</head>
+
+<body>
+
+    <h1>Student Dashboard</h1>
+
+    <p>Welcome to Smart Hostel Management System</p>
+
+    <p>
+        Student ID:
+        <strong>{{ student_id }}</strong>
+    </p>
+
+
+    <h2>Leave Applications</h2>
+
+    <div>
+
+        <a href="/sick-leave">
+            <button>Apply Sick Leave</button>
+        </a>
+
+        <a href="/outing">
+            <button>Apply Outing</button>
+        </a>
+
+        <a href="/home-visit">
+            <button>Apply Home Visit</button>
+        </a>
+
+        <a href="/semester-leave">
+            <button>Apply Semester Leave</button>
+        </a>
+
+        <a href="/hometown-leave">
+            <button>Apply Hometown Leave</button>
+        </a>
+
+    </div>
+
+
+    <h2>My Requests</h2>
+
+
+    {% if requests %}
+
+    <table>
+
+        <tr>
+
+            <th>Leave Type</th>
+
+            <th>Leave Date / Time</th>
+
+            <th>Reason</th>
+
+            <th>Status</th>
+
+        </tr>
+
+
+        {% for request in requests %}
+
+        <tr>
+
+            <td>
+                {{ request["leave_type"] }}
+            </td>
+
+            <td>
+                {{ request["leave_date"] }}
+            </td>
+
+            <td>
+                {{ request["reason"] }}
+            </td>
+
+            <td>
+
+                {% if request["status"] == "Approved" %}
+
+                    <span class="status status-approved">
+                        ✓ Approved
+                    </span>
+
+                {% elif request["status"] == "Rejected" %}
+
+                    <span class="status status-rejected">
+                        ✕ Rejected
+                    </span>
+
+                {% else %}
+
+                    <span class="status status-pending">
+                        ⏳ Pending
+                    </span>
+
+                {% endif %}
+
+            </td>
+
+        </tr>
+
+        {% endfor %}
+
+    </table>
+
+    {% else %}
+
+        <p>No requests submitted yet.</p>
+
+    {% endif %}
+
+
+    <br>
+
+    <a href="/">
+        <button>Logout</button>
+    </a>
+
+
+</body>
+
+</html>

@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+    <title>Semester Leave - Smart Hostel</title>
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+
+</head>
+
+<body>
+
+    <h1>Semester Leave Application</h1>
+
+    <form method="POST" action="/semester-leave">
+
+        <label>Student ID</label>
+
+        <br>
+
+        <input
+            type="text"
+            name="student_id"
+            placeholder="Enter Student ID"
+            required
+        >
+
+        <br><br>
+
+
+        <label>From Date</label>
+
+        <br>
+
+        <input
+            type="date"
+            name="from_date"
+            required
+        >
+
+        <br><br>
+
+
+        <label>To Date</label>
+
+        <br>
+
+        <input
+            type="date"
+            name="to_date"
+            required
+        >
+
+        <br><br>
+
+
+        <label>Reason</label>
+
+        <br>
+
+        <textarea
+            name="reason"
+            placeholder="Enter reason for semester leave"
+            rows="5"
+            required
+        ></textarea>
+
+        <br><br>
+
+
+        <button type="submit">
+            Submit Semester Leave
+        </button>
+
+    </form>
+
+</body>
+
+</html>

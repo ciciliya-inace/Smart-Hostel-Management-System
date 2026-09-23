@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Sick Leave - Smart Hostel</title>
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+
+<body>
+
+    <h1>Sick Leave Application</h1>
+
+    <form method="POST" action="/sick-leave">
+
+        <label>Student ID</label>
+        <br>
+        <input type="text" name="student_id" placeholder="Enter Student ID" required>
+
+        <br><br>
+
+        <label>Leave Date</label>
+        <br>
+        <input type="date" name="leave_date" required>
+
+        <br><br>
+
+        <label>Reason</label>
+        <br>
+        <textarea name="reason" placeholder="Enter reason for sick leave" rows="5" required></textarea>
+
+        <br><br>
+
+        <button type="submit">Submit Sick Leave</button>
+
+    </form>
+
+</body>
+</html>

@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+    <title>Outing Request - Smart Hostel</title>
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+
+</head>
+
+<body>
+
+    <h1>Outing Request</h1>
+
+    <form method="POST" action="/outing">
+
+        <label>Student ID</label>
+
+        <br>
+
+        <input
+            type="text"
+            name="student_id"
+            placeholder="Enter Student ID"
+            required
+        >
+
+        <br><br>
+
+
+        <label>Outing Date</label>
+
+        <br>
+
+        <input
+            type="date"
+            name="outing_date"
+            required
+        >
+
+        <br><br>
+
+
+        <label>Outing Time</label>
+
+        <br>
+
+        <input
+            type="time"
+            name="outing_time"
+            required
+        >
+
+        <br><br>
+
+
+        <label>Return Time</label>
+
+        <br>
+
+        <input
+            type="time"
+            name="return_time"
+            required
+        >
+
+        <br><br>
+
+
+        <label>Reason</label>
+
+        <br>
+
+        <textarea
+            name="reason"
+            placeholder="Enter reason for outing"
+            rows="5"
+            required
+        ></textarea>
+
+        <br><br>
+
+
+        <button type="submit">
+            Submit Outing Request
+        </button>
+
+    </form>
+
+</body>
+
+</html>

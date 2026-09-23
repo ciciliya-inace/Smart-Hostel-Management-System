@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Student Login - Smart Hostel</title>
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+
+<body>
+
+    <h1>Student Login</h1>
+
+    <form method="POST" action="/login">
+
+        <input 
+            type="text" 
+            name="student_id" 
+            placeholder="Student ID"
+        >
+
+        <br><br>
+
+        <input 
+            type="password" 
+            name="password" 
+            placeholder="Password"
+        >
+
+        <br><br>
+
+        <button type="submit">Login</button>
+
+    </form>
+
+</body>
+</html>

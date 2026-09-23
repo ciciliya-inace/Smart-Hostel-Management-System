@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+    <title>Warden Dashboard - Smart Hostel</title>
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+
+</head>
+
+<body>
+
+    <h1>Warden Dashboard</h1>
+
+    <p>Smart Hostel Management System</p>
+
+
+    <h2>Request Statistics</h2>
+
+    <div>
+
+        <div>
+            <h3>Total Requests</h3>
+            <p>{{ total_requests }}</p>
+        </div>
+
+        <div>
+            <h3>Pending</h3>
+            <p>{{ pending_requests }}</p>
+        </div>
+
+        <div>
+            <h3>Approved</h3>
+            <p>{{ approved_requests }}</p>
+        </div>
+
+        <div>
+            <h3>Rejected</h3>
+            <p>{{ rejected_requests }}</p>
+        </div>
+
+    </div>
+
+
+    <h2>Leave Requests</h2>
+
+
+    {% if requests %}
+
+    <table>
+
+        <tr>
+
+            <th>Student ID</th>
+            <th>Leave Type</th>
+            <th>Leave Date / Time</th>
+            <th>Reason</th>
+            <th>Status</th>
+            <th>Action</th>
+
+        </tr>
+
+
+        {% for request in requests %}
+
+        <tr>
+
+            <td>
+                {{ request["student_id"] }}
+            </td>
+
+            <td>
+                {{ request["leave_type"] }}
+            </td>
+
+            <td>
+                {{ request["leave_date"] }}
+            </td>
+
+            <td>
+                {{ request["reason"] }}
+            </td>
+
+            <td>
+                {{ request["status"] }}
+            </td>
+
+            <td>
+
+                <form
+                    method="POST"
+                    action="/update-request/{{ request['id'] }}"
+                >
+
+                    <button
+                        type="submit"
+                        name="status"
+                        value="Approved"
+                    >
+                        Approve
+                    </button>
+
+                    <button
+                        type="submit"
+                        name="status"
+                        value="Rejected"
+                    >
+                        Reject
+                    </button>
+
+                </form>
+
+            </td>
+
+        </tr>
+
+        {% endfor %}
+
+    </table>
+
+    {% else %}
+
+    <p>No leave requests available.</p>
+
+    {% endif %}
+
+
+    <br>
+
+    <a href="/">
+        <button>Logout</button>
+    </a>
+
+
+</body>
+
+</html>

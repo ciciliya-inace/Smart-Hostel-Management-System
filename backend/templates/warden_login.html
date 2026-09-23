@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+    <title>Warden Login - Smart Hostel</title>
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+
+</head>
+
+<body>
+
+    <h1>Warden Login</h1>
+
+    <form method="POST" action="/warden-login">
+
+        <label>Warden Username</label>
+
+        <br>
+
+        <input
+            type="text"
+            name="username"
+            placeholder="Enter Warden Username"
+            required
+        >
+
+        <br><br>
+
+
+        <label>Password</label>
+
+        <br>
+
+        <input
+            type="password"
+            name="password"
+            placeholder="Enter Password"
+            required
+        >
+
+        <br><br>
+
+
+        <button type="submit">
+            Warden Login
+        </button>
+
+    </form>
+
+</body>
+
+</html>
