@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request
+from flask import Flask, render_template, request, redirect
 import sqlite3
 import os
 
@@ -11,6 +11,30 @@ DATABASE_PATH = os.path.join(BASE_DIR, "hostel.db")
 def get_database_connection():
     connection = sqlite3.connect(DATABASE_PATH)
     connection.row_factory = sqlite3.Row
+
+    cursor = connection.cursor()
+
+    cursor.execute("""
+        CREATE TABLE IF NOT EXISTS students (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            student_id TEXT UNIQUE NOT NULL,
+            password TEXT NOT NULL
+        )
+    """)
+
+    cursor.execute("""
+        CREATE TABLE IF NOT EXISTS leave_requests (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            student_id TEXT NOT NULL,
+            leave_type TEXT NOT NULL,
+            leave_date TEXT NOT NULL,
+            reason TEXT NOT NULL,
+            status TEXT DEFAULT 'Pending'
+        )
+    """)
+
+    connection.commit()
+
     return connection
 
 
@@ -155,6 +179,164 @@ def home_visit():
         return "Home visit request submitted successfully!"
 
     return render_template("home_visit.html")
+
+
+@app.route("/semester-leave", methods=["GET", "POST"])
+def semester_leave():
+
+    if request.method == "POST":
+
+        student_id = request.form.get("student_id")
+        from_date = request.form.get("from_date")
+        to_date = request.form.get("to_date")
+        reason = request.form.get("reason")
+
+        full_date = (
+            "From: "
+            + from_date
+            + " | To: "
+            + to_date
+        )
+
+        connection = get_database_connection()
+
+        connection.execute(
+            """
+            INSERT INTO leave_requests
+            (student_id, leave_type, leave_date, reason)
+            VALUES (?, ?, ?, ?)
+            """,
+            (student_id, "Semester Leave", full_date, reason)
+        )
+
+        connection.commit()
+        connection.close()
+
+        return "Semester leave application submitted successfully!"
+
+    return render_template("semester_leave.html")
+
+
+@app.route("/hometown-leave", methods=["GET", "POST"])
+def hometown_leave():
+
+    if request.method == "POST":
+
+        student_id = request.form.get("student_id")
+        from_date = request.form.get("from_date")
+        to_date = request.form.get("to_date")
+        hometown = request.form.get("hometown")
+        reason = request.form.get("reason")
+
+        full_date = (
+            "From: "
+            + from_date
+            + " | To: "
+            + to_date
+        )
+
+        full_reason = (
+            "Hometown: "
+            + hometown
+            + " | Reason: "
+            + reason
+        )
+
+        connection = get_database_connection()
+
+        connection.execute(
+            """
+            INSERT INTO leave_requests
+            (student_id, leave_type, leave_date, reason)
+            VALUES (?, ?, ?, ?)
+            """,
+            (student_id, "Hometown Leave", full_date, full_reason)
+        )
+
+        connection.commit()
+        connection.close()
+
+        return "Hometown leave application submitted successfully!"
+
+    return render_template("hometown_leave.html")
+
+
+@app.route("/warden-login", methods=["GET", "POST"])
+def warden_login():
+
+    if request.method == "POST":
+
+        username = request.form.get("username")
+        password = request.form.get("password")
+
+        if username == "warden" and password == "1234":
+            return redirect("/warden-dashboard")
+
+        return "Invalid Warden Username or Password!"
+
+    return render_template("warden_login.html")
+
+
+@app.route("/warden-dashboard")
+def warden_dashboard():
+
+    connection = get_database_connection()
+
+    requests = connection.execute(
+        """
+        SELECT * FROM leave_requests
+        ORDER BY id DESC
+        """
+    ).fetchall()
+
+    total_requests = connection.execute(
+        "SELECT COUNT(*) FROM leave_requests"
+    ).fetchone()[0]
+
+    pending_requests = connection.execute(
+        "SELECT COUNT(*) FROM leave_requests WHERE status = 'Pending'"
+    ).fetchone()[0]
+
+    approved_requests = connection.execute(
+        "SELECT COUNT(*) FROM leave_requests WHERE status = 'Approved'"
+    ).fetchone()[0]
+
+    rejected_requests = connection.execute(
+        "SELECT COUNT(*) FROM leave_requests WHERE status = 'Rejected'"
+    ).fetchone()[0]
+
+    connection.close()
+
+    return render_template(
+        "warden_dashboard.html",
+        requests=requests,
+        total_requests=total_requests,
+        pending_requests=pending_requests,
+        approved_requests=approved_requests,
+        rejected_requests=rejected_requests
+    )
+
+
+@app.route("/update-request/<int:request_id>", methods=["POST"])
+def update_request(request_id):
+
+    status = request.form.get("status")
+
+    connection = get_database_connection()
+
+    connection.execute(
+        """
+        UPDATE leave_requests
+        SET status = ?
+        WHERE id = ?
+        """,
+        (status, request_id)
+    )
+
+    connection.commit()
+    connection.close()
+
+    return redirect("/warden-dashboard")
 
 
 if __name__ == "__main__":
